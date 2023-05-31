@@ -19,11 +19,18 @@ public class AccountResponseDtoServiceImpl implements AccountResponseDtoService 
     @Override
     public AccountResponseDto getOwnerByQuestionId(Long questionId) {
         return accountResponseDtoRepository.getOwnerByQuestionId(questionId).orElseThrow(() ->
-                new EntityNotFoundException(String.format("Question`s owner with question id#%d not found", questionId)));
+                new EntityNotFoundException(String.format("The owner of the question with id#%d not found", questionId)));
     }
 
     @Override
     public Map<Long, AccountResponseDto> getOwnersByQuestionIds(List<Long> questionIds) {
         return accountResponseDtoRepository.getOwnersByQuestionIds(questionIds);
+    }
+
+    @Override
+    public AccountResponseDto getByQuestionCommentId(Long questionCommentId) {
+        return accountResponseDtoRepository.getByQuestionCommentId(questionCommentId).orElseThrow(() ->
+                new EntityNotFoundException(String.format("The owner of the question comment with id#%d not found",
+                        questionCommentId)));
     }
 }

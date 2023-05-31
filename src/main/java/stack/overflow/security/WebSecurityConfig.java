@@ -52,6 +52,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/docs/**").permitAll()
                 .antMatchers("/api/v1/token/**").permitAll()
                 .antMatchers("/api/v1/user/questions/**").hasAuthority(PermissionName.USER.name())
+                .antMatchers("/api/v1/user/question-comments/**").hasAuthority(PermissionName.USER.name())
                 .anyRequest().authenticated();
     }
 }

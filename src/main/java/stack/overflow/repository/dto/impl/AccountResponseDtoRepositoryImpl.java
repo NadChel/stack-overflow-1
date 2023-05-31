@@ -71,4 +71,16 @@ public class AccountResponseDtoRepositoryImpl implements AccountResponseDtoRepos
                 .getResultList();
         return resultMap;
     }
+
+    @Override
+    public Optional<AccountResponseDto> getByQuestionCommentId(Long id) {
+        TypedQuery<AccountResponseDto> query = entityManager.createQuery("""
+                SELECT new stack.overflow.model.dto.response.AccountResponseDto(a.id, a.username)
+                FROM Account a JOIN QuestionComment qc
+                ON a.id = qc.owner.id
+                WHERE qc.id = :id
+            """, AccountResponseDto.class)
+                .setParameter("id", id);
+       return JpaResultUtil.getSingleResultOrNull(query);
+    }
 }

@@ -10,4 +10,6 @@ public interface AccountResponseDtoService {
     AccountResponseDto getOwnerByQuestionId(Long questionId);
 
     Map<Long, AccountResponseDto> getOwnersByQuestionIds(List<Long> questionIds);
+
+    AccountResponseDto getByQuestionCommentId(Long questionCommentId);
 }

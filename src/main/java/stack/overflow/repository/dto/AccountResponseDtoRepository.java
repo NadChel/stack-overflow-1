@@ -11,4 +11,6 @@ public interface AccountResponseDtoRepository {
     Optional<AccountResponseDto> getOwnerByQuestionId(Long questionId);
 
     Map<Long, AccountResponseDto> getOwnersByQuestionIds(List<Long> questionIds);
+
+    Optional<AccountResponseDto> getByQuestionCommentId(Long id);
 }

@@ -5,9 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.mapstruct.factory.Mappers;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.security.core.Authentication;
+import stack.overflow.model.dto.request.QuestionCommentRequestDto;
+import stack.overflow.model.mapper.QuestionCommentMapper;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -64,6 +68,12 @@ public class QuestionComment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "question_id", nullable = false, updatable = false)
     private Question question;
+
+    public static QuestionComment ofDtoAndAuthentication(QuestionCommentRequestDto dto,
+                                                         Authentication authentication) {
+        QuestionCommentMapper mapper = Mappers.getMapper(QuestionCommentMapper.class);
+        return mapper.dtoAndAuthenticationToQuestionComment(dto, authentication);
+    }
 
     @Override
     public boolean equals(Object o) {

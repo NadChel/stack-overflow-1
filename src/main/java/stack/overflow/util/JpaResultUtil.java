@@ -11,9 +11,9 @@ public final class JpaResultUtil {
 
     public static <T> Optional<T> getSingleResultOrNull(TypedQuery<T> query) {
         try {
-            return Optional.ofNullable(query.getSingleResult());
-        } catch (NoResultException ignore) {
+            return Optional.of(query.getSingleResult());
+        } catch (NoResultException e) {
+            return Optional.empty();
         }
-        return Optional.empty();
     }
 }
