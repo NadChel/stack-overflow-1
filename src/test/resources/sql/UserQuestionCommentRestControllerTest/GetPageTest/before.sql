@@ -31,13 +31,13 @@ INSERT INTO questions_tags(question_id, tag_id)
 VALUES (1, 1), (1, 2), (1, 3);
 
 INSERT INTO question_comments(id, created_date, modified_date, text, account_id, question_id)
-VALUES (1, current_timestamp, current_timestamp, 'text', 1, 1),
-       (2, current_timestamp, current_timestamp, 'text', 1, 1),
-       (3, current_timestamp, current_timestamp, 'text', 1, 1),
-       (4, current_timestamp, current_timestamp, 'text', 1, 1),
-       (5, current_timestamp, current_timestamp, 'text', 1, 1),
-       (6, current_timestamp, current_timestamp, 'text', 1, 1),
-       (7, current_timestamp, current_timestamp, 'text', 1, 1),
-       (8, current_timestamp, current_timestamp, 'text', 1, 1),
-       (9, current_timestamp, current_timestamp, 'text', 1, 1),
-       (10, current_timestamp, current_timestamp, 'text', 1, 1);
+VALUES (1, '1970-01-01 06:00:00', '1970-01-01 06:00:00', 'text', 1, 1),
+       (2, '1970-01-01 00:00:00', '1970-01-01 07:00:00', 'text', 1, 1),
+       (3, '1970-01-01 01:00:00', '1970-01-01 00:00:00', 'text', 1, 1),
+       (4, '1970-01-01 07:00:00', '1970-01-01 01:00:00', 'text', 1, 1),
+       (5, '1970-01-01 02:00:00', '1970-01-01 08:00:00', 'text', 1, 1),
+       (6, '1970-01-01 03:00:00', '1970-01-01 02:00:00', 'text', 1, 1),
+       (7, '1970-01-01 08:00:00', '1970-01-01 03:00:00', 'text', 1, 1),
+       (8, '1970-01-01 04:00:00', '1970-01-01 09:00:00', 'text', 1, 1),
+       (9, '1970-01-01 05:00:00', '1970-01-01 04:00:00', 'text', 1, 1),
+       (10, '1970-01-01 09:00:00', '1970-01-01 05:00:00', 'text', 1, 1);

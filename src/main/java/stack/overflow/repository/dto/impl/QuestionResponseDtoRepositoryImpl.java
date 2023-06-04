@@ -36,7 +36,7 @@ public class QuestionResponseDtoRepositoryImpl implements QuestionResponseDtoRep
     }
 
     @Override
-    public List<QuestionResponseDto> getDtos(PaginationParameters paginationParameters) {
+    public List<QuestionResponseDto> getDtosWithoutSetOwner(PaginationParameters paginationParameters) {
         return entityManager.createQuery(
                         """
                                 SELECT new stack.overflow.model.dto.response.QuestionResponseDto(

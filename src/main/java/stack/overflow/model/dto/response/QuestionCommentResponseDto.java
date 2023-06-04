@@ -1,5 +1,6 @@
 package stack.overflow.model.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,12 +16,21 @@ public class QuestionCommentResponseDto {
     @Setter
     private AccountResponseDto owner;
 
-    public QuestionCommentResponseDto(Long id, Long questionId, LocalDateTime createdDate, LocalDateTime modifiedDate, String text) {
+    public QuestionCommentResponseDto(Long id, Long questionId, LocalDateTime createdDate,
+                                      LocalDateTime modifiedDate, String text) {
         this.id = id;
         this.questionId = questionId;
         this.createdDate = createdDate;
         this.modifiedDate = modifiedDate;
         this.text = text;
+    }
+    @JsonCreator
+    private QuestionCommentResponseDto(Long id, Long questionId,
+                                       LocalDateTime createdDate,
+                                       LocalDateTime modifiedDate,
+                                       String text, AccountResponseDto owner) {
+        this(id, questionId, createdDate, modifiedDate, text);
+        this.owner = owner;
     }
 
     @Override

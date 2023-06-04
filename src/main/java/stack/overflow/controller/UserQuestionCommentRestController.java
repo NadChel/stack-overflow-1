@@ -10,6 +10,7 @@ import stack.overflow.model.dto.request.QuestionCommentRequestDto;
 import stack.overflow.model.dto.response.QuestionCommentResponseDto;
 import stack.overflow.model.entity.QuestionComment;
 import stack.overflow.model.enumeration.SortType;
+import stack.overflow.model.mapper.QuestionCommentMapper;
 import stack.overflow.model.pagination.Page;
 import stack.overflow.model.pagination.PaginationParameters;
 import stack.overflow.service.dto.QuestionCommentResponseDtoService;
@@ -27,11 +28,12 @@ import java.net.URI;
 public class UserQuestionCommentRestController {
     private final QuestionCommentService service;
     private final QuestionCommentResponseDtoService dtoService;
+    private final QuestionCommentMapper questionCommentMapper;
     private static final String BASE_URI = "/api/v1/user/question-comments";
     @PostMapping
     public ResponseEntity<Void> createComment(@RequestBody @Valid @NotNull QuestionCommentRequestDto dto,
                                               @NotNull Authentication authentication) {
-        QuestionComment questionComment = QuestionComment.ofDtoAndAuthentication(dto, authentication);
+        QuestionComment questionComment = questionCommentMapper.dtoAndAuthenticationToQuestionComment(dto, authentication);
         QuestionComment savedQuestionComment = service.create(questionComment);
         Long generatedId = savedQuestionComment.getId();
         URI location = URI.create(BASE_URI + "/" + generatedId);

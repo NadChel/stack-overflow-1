@@ -1,6 +1,7 @@
 package stack.overflow.controller.expectationTesters;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import org.springframework.mock.web.MockHttpServletResponse;
 import stack.overflow.model.api.Data;
 import stack.overflow.model.dto.response.AccountResponseDto;
@@ -17,8 +18,10 @@ public class GetCommentExpectationTester extends AbstractGetCommentExpectationTe
     }
     @Override
     public void test() throws JsonProcessingException {
+        TypeReference<Data<QuestionCommentResponseDto>> typeReference =
+                new TypeReference<>() {};
         Data<QuestionCommentResponseDto> deserializedResponseBody =
-                objectMapper.readValue(serializedResponseBody, Data.class);
+                objectMapper.readValue(serializedResponseBody, typeReference);
         assertNotNull(deserializedResponseBody.getData());
         QuestionCommentResponseDto dto = deserializedResponseBody.getData();
         assertEquals(expectedQuestionId, dto.getQuestionId());

@@ -35,7 +35,7 @@ public class QuestionResponseDtoServiceImpl implements QuestionResponseDtoServic
 
     @Override
     public Page<QuestionResponseDto> getPage(PaginationParameters paginationParameters) {
-        List<QuestionResponseDto> resultDtos = questionResponseDtoRepository.getDtos(paginationParameters);
+        List<QuestionResponseDto> resultDtos = questionResponseDtoRepository.getDtosWithoutSetOwner(paginationParameters);
         Long resultCount = questionResponseDtoRepository.getCount();
         addOwners(resultDtos);
         addTags(resultDtos);

@@ -1,32 +1,16 @@
 package stack.overflow.model.entity;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.mapstruct.factory.Mappers;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.security.core.Authentication;
-import stack.overflow.model.dto.request.QuestionCommentRequestDto;
-import stack.overflow.model.mapper.QuestionCommentMapper;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.StringJoiner;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -69,12 +53,6 @@ public class QuestionComment {
     @JoinColumn(name = "question_id", nullable = false, updatable = false)
     private Question question;
 
-    public static QuestionComment ofDtoAndAuthentication(QuestionCommentRequestDto dto,
-                                                         Authentication authentication) {
-        QuestionCommentMapper mapper = Mappers.getMapper(QuestionCommentMapper.class);
-        return mapper.dtoAndAuthenticationToQuestionComment(dto, authentication);
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -86,5 +64,17 @@ public class QuestionComment {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", QuestionComment.class.getSimpleName() + "[", "]")
+                .add("id=" + id)
+                .add("createdDate=" + createdDate)
+                .add("modifiedDate=" + modifiedDate)
+                .add("text='" + text + "'")
+                .add("owner=" + owner)
+                .add("question=" + question)
+                .toString();
     }
 }
