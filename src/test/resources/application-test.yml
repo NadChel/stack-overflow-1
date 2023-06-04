@@ -9,3 +9,8 @@ jwt:
     key: abrakadabra
   expiration:
     hours: 10
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type: TRACE

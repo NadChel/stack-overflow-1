@@ -62,7 +62,7 @@ public class UserQuestionCommentRestController {
     public ResponseEntity<Data<Page<QuestionCommentResponseDto>>> getPage(@PathVariable @Positive @NotNull Integer pageNumber,
                                                                           @RequestParam(defaultValue = "20") @NotNull Integer pageSize,
                                                                           @RequestParam(defaultValue = "ID_ASC") @NotNull SortType sortType) {
-        System.out.printf("PaginationParameters[pageNumber=%d, pageSize=%d, sortType=%s]", pageNumber, pageSize, sortType);
+        System.out.printf("PaginationParameters[pageNumber=%d, pageSize=%d, sortType=%s]\n", pageNumber, pageSize, sortType);
         PaginationParameters params = PaginationParameters.ofPageNumberSizeAndSortType(pageNumber, pageSize, sortType);
         Page<QuestionCommentResponseDto> page = dtoService.getPage(params);
         Data<Page<QuestionCommentResponseDto>> responseData = Data.build(page);

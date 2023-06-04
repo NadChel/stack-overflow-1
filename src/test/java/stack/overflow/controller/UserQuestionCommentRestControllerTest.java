@@ -148,4 +148,27 @@ public class UserQuestionCommentRestControllerTest extends IntegrationTestContex
 
         expectationTester.test();
     }
+
+    @Test
+    @Sql(executionPhase = BEFORE_TEST_METHOD, value = BASE_SCRIPT_PATH + "GetPageTest/before.sql")
+    @Sql(executionPhase = AFTER_TEST_METHOD, value = BASE_SCRIPT_PATH + "GetPageTest/after.sql")
+    public void getPageOneSizeFiveSortByIdDescTest() throws Exception {
+        token = testUtil.getToken(testUsername, testPassword);
+        MockHttpServletResponse response = mockMvc.perform(get(BASE_URI + "page/" + 1)
+                        .header(HttpHeaders.AUTHORIZATION, token)
+                        .param("pageSize", "5")
+                        .param("sortType", "ID_DESC"))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse();
+
+        expectationTester = new GetCommentPageExpectationTester.Builder(response)
+                .setExpectedPageCount(10)
+                .setExpectedPageDtoListSize(5)
+                .setExpectedFirstCommentId(5)
+                .setExpectedOwnerUsername("mickey_m")
+                .build();
+
+        expectationTester.test();
+    }
 }
