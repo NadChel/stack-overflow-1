@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface PaginationRepository<T> {
 
-    List<T> getDtos(PaginationParameters paginationParameters);
+    List<T> getDtosWithoutSetOwner(PaginationParameters paginationParameters);
 
     Long getCount();
 }

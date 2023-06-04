@@ -24,7 +24,7 @@ public class QuestionCommentResponseDtoRepositoryImpl implements QuestionComment
         TypedQuery<QuestionCommentResponseDto> query = entityManager.createQuery("""
                             SELECT new stack.overflow.model.dto.response.QuestionCommentResponseDto (
                             qc.id, q.id, qc.createdDate, qc.modifiedDate, qc.text
-                            ) FROM QuestionComment qc JOIN FETCH Question q
+                            ) FROM QuestionComment qc JOIN qc.question q
                             WHERE qc.id = :id
                         """, QuestionCommentResponseDto.class)
                 .setParameter("id", id);
@@ -32,17 +32,19 @@ public class QuestionCommentResponseDtoRepositoryImpl implements QuestionComment
     }
 
     @Override
-    public List<QuestionCommentResponseDto> getDtos(PaginationParameters params) {
-        String sortingModifier = PaginationParametersProcessor.extractQuery(params);
+    public List<QuestionCommentResponseDto> getDtosWithoutSetOwner(PaginationParameters params) {
+        String sortingModifier = PaginationParametersProcessor.extractSortingModifier(params);
         int offset = PaginationParametersProcessor.extractFirstResultIndex(params);
+        int limit = PaginationParametersProcessor.extractMaxResults(params);
         return entityManager.createQuery("""
                 SELECT new stack.overflow.model.dto.response.QuestionCommentResponseDto (
                             qc.id, q.id, qc.createdDate, qc.modifiedDate, qc.text
-                ) FROM QuestionComment qc JOIN FETCH Question q
+                ) FROM QuestionComment qc JOIN qc.question q
                 ORDER BY :sort
                 """, QuestionCommentResponseDto.class)
                 .setParameter("sort", sortingModifier)
                 .setFirstResult(offset)
+                .setMaxResults(limit)
                 .getResultList();
     }
 

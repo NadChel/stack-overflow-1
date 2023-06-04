@@ -1,7 +1,6 @@
 package stack.overflow.controller;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -11,7 +10,6 @@ import stack.overflow.controller.expectationTesters.ExpectationTester;
 import stack.overflow.controller.expectationTesters.GetCommentExpectationTester;
 import stack.overflow.controller.expectationTesters.GetCommentPageExpectationTester;
 import stack.overflow.model.dto.request.QuestionCommentRequestDto;
-import stack.overflow.util.TestUtil;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
@@ -22,20 +20,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class UserQuestionCommentRestControllerTest extends IntegrationTestContext {
     private static final String testUsername = "mickey_m";
     private static final String testPassword = "mickey";
-    private final String token;
+    private String token;
     private static final String BASE_URI = "/api/v1/user/question-comments/";
     private static final String BASE_SCRIPT_PATH = "/sql/UserQuestionCommentRestControllerTest/";
     private ExpectationTester expectationTester;
 
-    @Autowired
-    public UserQuestionCommentRestControllerTest(TestUtil testUtil) throws Exception {
-        token = testUtil.getToken(testUsername, testPassword);
+    public UserQuestionCommentRestControllerTest() {
+
     }
 
     @Sql(executionPhase = BEFORE_TEST_METHOD, value = BASE_SCRIPT_PATH + "CreateCommentTest/before.sql")
     @Sql(executionPhase = AFTER_TEST_METHOD, value = BASE_SCRIPT_PATH + "CreateCommentTest/after.sql")
     @Test
     public void createCommentTest() throws Exception {
+        token = testUtil.getToken(testUsername, testPassword);
         QuestionCommentRequestDto dto =
                 new QuestionCommentRequestDto("text", 1L);
         mockMvc.perform(post(BASE_URI)
@@ -61,6 +59,7 @@ public class UserQuestionCommentRestControllerTest extends IntegrationTestContex
     @Sql(executionPhase = BEFORE_TEST_METHOD, value = BASE_SCRIPT_PATH + "DeleteCommentTest/before.sql")
     @Sql(executionPhase = AFTER_TEST_METHOD, value = BASE_SCRIPT_PATH + "DeleteCommentTest/after.sql")
     public void deleteCommentTest() throws Exception {
+        token = testUtil.getToken(testUsername, testPassword);
         mockMvc.perform(delete(BASE_URI + 1)
                         .header(HttpHeaders.AUTHORIZATION, token))
                 .andExpect(status().isOk());
@@ -75,6 +74,7 @@ public class UserQuestionCommentRestControllerTest extends IntegrationTestContex
     @Sql(executionPhase = BEFORE_TEST_METHOD, value = BASE_SCRIPT_PATH + "GetCommentTest/before.sql")
     @Sql(executionPhase = AFTER_TEST_METHOD, value = BASE_SCRIPT_PATH + "GetCommentTest/after.sql")
     public void getCommentTest() throws Exception {
+        token = testUtil.getToken(testUsername, testPassword);
         MockHttpServletResponse response = mockMvc.perform(get(BASE_URI + 1)
                         .header(HttpHeaders.AUTHORIZATION, token))
                 .andExpect(status().isOk())
@@ -82,7 +82,7 @@ public class UserQuestionCommentRestControllerTest extends IntegrationTestContex
                 .getResponse();
 
         expectationTester = new GetCommentExpectationTester.Builder(response)
-                .setExpectedOwnerUsername("mickey")
+                .setExpectedOwnerUsername("mickey_m")
                 .build();
 
         expectationTester.test();
@@ -92,6 +92,7 @@ public class UserQuestionCommentRestControllerTest extends IntegrationTestContex
     @Sql(executionPhase = BEFORE_TEST_METHOD, value = BASE_SCRIPT_PATH + "GetPageTest/before.sql")
     @Sql(executionPhase = AFTER_TEST_METHOD, value = BASE_SCRIPT_PATH + "GetPageTest/after.sql")
     public void getPageOneDefaultTest() throws Exception {
+        token = testUtil.getToken(testUsername, testPassword);
         MockHttpServletResponse response = mockMvc.perform(get(BASE_URI + "page/" + 1)
                         .header(HttpHeaders.AUTHORIZATION, token))
                 .andExpect(status().isOk())
@@ -110,6 +111,7 @@ public class UserQuestionCommentRestControllerTest extends IntegrationTestContex
     @Sql(executionPhase = BEFORE_TEST_METHOD, value = BASE_SCRIPT_PATH + "GetPageTest/before.sql")
     @Sql(executionPhase = AFTER_TEST_METHOD, value = BASE_SCRIPT_PATH + "GetPageTest/after.sql")
     public void getPageOneSizeFiveTest() throws Exception {
+        token = testUtil.getToken(testUsername, testPassword);
         MockHttpServletResponse response = mockMvc.perform(get(BASE_URI + "page/" + 1)
                         .header(HttpHeaders.AUTHORIZATION, token)
                         .param("pageSize", "5"))
@@ -129,6 +131,7 @@ public class UserQuestionCommentRestControllerTest extends IntegrationTestContex
     @Sql(executionPhase = BEFORE_TEST_METHOD, value = BASE_SCRIPT_PATH + "GetPageTest/before.sql")
     @Sql(executionPhase = AFTER_TEST_METHOD, value = BASE_SCRIPT_PATH + "GetPageTest/after.sql")
     public void getPageTwoSizeFiveTest() throws Exception {
+        token = testUtil.getToken(testUsername, testPassword);
         MockHttpServletResponse response = mockMvc.perform(get(BASE_URI + "page/" + 2)
                         .header(HttpHeaders.AUTHORIZATION, token)
                         .param("pageSize", "5"))

@@ -2,6 +2,8 @@ package stack.overflow.controller.expectationTesters;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import org.springframework.mock.web.MockHttpServletResponse;
 
 import java.io.UnsupportedEncodingException;
@@ -19,7 +21,9 @@ public abstract class AbstractGetCommentExpectationTester implements Expectation
         this.expectedOwnerUsername = builder.expectedOwnerUsername;
         this.expectedQuestionId = builder.expectedQuestionId;
         this.expectedCommentText = builder.expectedCommentText;
-        this.objectMapper = new ObjectMapper();
+        this.objectMapper = new ObjectMapper()
+                .registerModule(new JavaTimeModule())
+                .registerModule(new ParameterNamesModule());
     }
     public abstract void test() throws JsonProcessingException;
     public abstract static class Builder {

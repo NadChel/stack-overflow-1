@@ -1,6 +1,7 @@
 package stack.overflow.controller.expectationTesters;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import org.springframework.mock.web.MockHttpServletResponse;
 import stack.overflow.model.api.Data;
 import stack.overflow.model.dto.response.AccountResponseDto;
@@ -26,8 +27,10 @@ public class GetCommentPageExpectationTester extends AbstractGetCommentExpectati
     }
     @Override
     public void test() throws JsonProcessingException {
+        TypeReference<Data<Page<QuestionCommentResponseDto>>> typeReference =
+                new TypeReference<>() {};
         Data<Page<QuestionCommentResponseDto>> deserializedResponseBody =
-                objectMapper.readValue(serializedResponseBody, Data.class);
+                objectMapper.readValue(serializedResponseBody, typeReference);
         assertNotNull(deserializedResponseBody.getData());
         Page<QuestionCommentResponseDto> page = deserializedResponseBody.getData();
         assertEquals(expectedPageCount, page.getCount());
@@ -35,10 +38,10 @@ public class GetCommentPageExpectationTester extends AbstractGetCommentExpectati
         List<QuestionCommentResponseDto> dtoList = page.getDtos();
         assertEquals(expectedPageDtoListSize, dtoList.size());
 
-        QuestionCommentResponseDto dto;
-        for (int i = 1; i <= dtoList.size(); i++) {
-            dto = dtoList.get(i);
-            assertEquals(expectedFirstCommentId, dto.getId());
+        QuestionCommentResponseDto firstDto = dtoList.get(0);
+        assertEquals(expectedFirstCommentId, firstDto.getId());
+
+        for (QuestionCommentResponseDto dto : dtoList) {
             assertEquals(expectedQuestionId, dto.getQuestionId());
             assertEquals(expectedCommentText, dto.getText());
             assertNotNull(dto.getCreatedDate());
