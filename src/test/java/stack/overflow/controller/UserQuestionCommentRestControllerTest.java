@@ -110,7 +110,7 @@ public class UserQuestionCommentRestControllerTest extends IntegrationTestContex
     @Test
     @Sql(executionPhase = BEFORE_TEST_METHOD, value = BASE_SCRIPT_PATH + "GetPageTest/before.sql")
     @Sql(executionPhase = AFTER_TEST_METHOD, value = BASE_SCRIPT_PATH + "GetPageTest/after.sql")
-    public void getPageOneSizeFiveTest() throws Exception {
+    public void getPageOneSizeFiveSortByIdTest() throws Exception {
         token = testUtil.getToken(testUsername, testPassword);
         MockHttpServletResponse response = mockMvc.perform(get(BASE_URI + "page/" + 1)
                         .header(HttpHeaders.AUTHORIZATION, token)
@@ -130,7 +130,29 @@ public class UserQuestionCommentRestControllerTest extends IntegrationTestContex
     @Test
     @Sql(executionPhase = BEFORE_TEST_METHOD, value = BASE_SCRIPT_PATH + "GetPageTest/before.sql")
     @Sql(executionPhase = AFTER_TEST_METHOD, value = BASE_SCRIPT_PATH + "GetPageTest/after.sql")
-    public void getPageTwoSizeFiveTest() throws Exception {
+    public void getPageOneSizeFiveSortByIdDescTest() throws Exception {
+        token = testUtil.getToken(testUsername, testPassword);
+        MockHttpServletResponse response = mockMvc.perform(get(BASE_URI + "page/" + 1)
+                        .header(HttpHeaders.AUTHORIZATION, token)
+                        .param("pageSize", "5")
+                        .param("sortType", "ID_DESC"))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse();
+
+        expectationTester = new GetCommentPageExpectationTester.Builder(response)
+                .setExpectedPageCount(10)
+                .setExpectedPageDtoListSize(5)
+                .setExpectedFirstCommentId(5)
+                .setExpectedOwnerUsername("mickey_m")
+                .build();
+
+        expectationTester.test();
+    }
+    @Test
+    @Sql(executionPhase = BEFORE_TEST_METHOD, value = BASE_SCRIPT_PATH + "GetPageTest/before.sql")
+    @Sql(executionPhase = AFTER_TEST_METHOD, value = BASE_SCRIPT_PATH + "GetPageTest/after.sql")
+    public void getPageTwoSizeFiveSortByIdTest() throws Exception {
         token = testUtil.getToken(testUsername, testPassword);
         MockHttpServletResponse response = mockMvc.perform(get(BASE_URI + "page/" + 2)
                         .header(HttpHeaders.AUTHORIZATION, token)
@@ -152,9 +174,9 @@ public class UserQuestionCommentRestControllerTest extends IntegrationTestContex
     @Test
     @Sql(executionPhase = BEFORE_TEST_METHOD, value = BASE_SCRIPT_PATH + "GetPageTest/before.sql")
     @Sql(executionPhase = AFTER_TEST_METHOD, value = BASE_SCRIPT_PATH + "GetPageTest/after.sql")
-    public void getPageOneSizeFiveSortByIdDescTest() throws Exception {
+    public void getPageTwoSizeFiveSortByIdDescTest() throws Exception {
         token = testUtil.getToken(testUsername, testPassword);
-        MockHttpServletResponse response = mockMvc.perform(get(BASE_URI + "page/" + 1)
+        MockHttpServletResponse response = mockMvc.perform(get(BASE_URI + "page/" + 2)
                         .header(HttpHeaders.AUTHORIZATION, token)
                         .param("pageSize", "5")
                         .param("sortType", "ID_DESC"))
@@ -165,7 +187,191 @@ public class UserQuestionCommentRestControllerTest extends IntegrationTestContex
         expectationTester = new GetCommentPageExpectationTester.Builder(response)
                 .setExpectedPageCount(10)
                 .setExpectedPageDtoListSize(5)
-                .setExpectedFirstCommentId(5)
+                .setExpectedFirstCommentId(10)
+                .setExpectedOwnerUsername("mickey_m")
+                .build();
+
+        expectationTester.test();
+    }
+
+    @Test
+    @Sql(executionPhase = BEFORE_TEST_METHOD, value = BASE_SCRIPT_PATH + "GetPageTest/before.sql")
+    @Sql(executionPhase = AFTER_TEST_METHOD, value = BASE_SCRIPT_PATH + "GetPageTest/after.sql")
+    public void getPageOneSizeFiveSortByCreatedDate() throws Exception {
+        token = testUtil.getToken(testUsername, testPassword);
+        MockHttpServletResponse response = mockMvc.perform(get(BASE_URI + "page/" + 1)
+                        .header(HttpHeaders.AUTHORIZATION, token)
+                        .param("pageSize", "5")
+                        .param("sortType", "CREATED_DATE_ASC"))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse();
+
+        expectationTester = new GetCommentPageExpectationTester.Builder(response)
+                .setExpectedPageCount(10)
+                .setExpectedPageDtoListSize(5)
+                .setExpectedFirstCommentId(2)
+                .setExpectedOwnerUsername("mickey_m")
+                .build();
+
+        expectationTester.test();
+    }
+
+    @Test
+    @Sql(executionPhase = BEFORE_TEST_METHOD, value = BASE_SCRIPT_PATH + "GetPageTest/before.sql")
+    @Sql(executionPhase = AFTER_TEST_METHOD, value = BASE_SCRIPT_PATH + "GetPageTest/after.sql")
+    public void getPageOneSizeFiveSortByCreatedDateDesc() throws Exception {
+        token = testUtil.getToken(testUsername, testPassword);
+        MockHttpServletResponse response = mockMvc.perform(get(BASE_URI + "page/" + 1)
+                        .header(HttpHeaders.AUTHORIZATION, token)
+                        .param("pageSize", "5")
+                        .param("sortType", "CREATED_DATE_DESC"))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse();
+
+        expectationTester = new GetCommentPageExpectationTester.Builder(response)
+                .setExpectedPageCount(10)
+                .setExpectedPageDtoListSize(5)
+                .setExpectedFirstCommentId(8)
+                .setExpectedOwnerUsername("mickey_m")
+                .build();
+
+        expectationTester.test();
+    }
+
+    @Test
+    @Sql(executionPhase = BEFORE_TEST_METHOD, value = BASE_SCRIPT_PATH + "GetPageTest/before.sql")
+    @Sql(executionPhase = AFTER_TEST_METHOD, value = BASE_SCRIPT_PATH + "GetPageTest/after.sql")
+    public void getPageTwoSizeFiveSortByCreatedDate() throws Exception {
+        token = testUtil.getToken(testUsername, testPassword);
+        MockHttpServletResponse response = mockMvc.perform(get(BASE_URI + "page/" + 2)
+                        .header(HttpHeaders.AUTHORIZATION, token)
+                        .param("pageSize", "5")
+                        .param("sortType", "CREATED_DATE_ASC"))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse();
+
+        expectationTester = new GetCommentPageExpectationTester.Builder(response)
+                .setExpectedPageCount(10)
+                .setExpectedPageDtoListSize(5)
+                .setExpectedFirstCommentId(9)
+                .setExpectedOwnerUsername("mickey_m")
+                .build();
+
+        expectationTester.test();
+    }
+
+    @Test
+    @Sql(executionPhase = BEFORE_TEST_METHOD, value = BASE_SCRIPT_PATH + "GetPageTest/before.sql")
+    @Sql(executionPhase = AFTER_TEST_METHOD, value = BASE_SCRIPT_PATH + "GetPageTest/after.sql")
+    public void getPageTwoSizeFiveSortByCreatedDateDesc() throws Exception {
+        token = testUtil.getToken(testUsername, testPassword);
+        MockHttpServletResponse response = mockMvc.perform(get(BASE_URI + "page/" + 2)
+                        .header(HttpHeaders.AUTHORIZATION, token)
+                        .param("pageSize", "5")
+                        .param("sortType", "CREATED_DATE_DESC"))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse();
+
+        expectationTester = new GetCommentPageExpectationTester.Builder(response)
+                .setExpectedPageCount(10)
+                .setExpectedPageDtoListSize(5)
+                .setExpectedFirstCommentId(10)
+                .setExpectedOwnerUsername("mickey_m")
+                .build();
+
+        expectationTester.test();
+    }
+
+    @Test
+    @Sql(executionPhase = BEFORE_TEST_METHOD, value = BASE_SCRIPT_PATH + "GetPageTest/before.sql")
+    @Sql(executionPhase = AFTER_TEST_METHOD, value = BASE_SCRIPT_PATH + "GetPageTest/after.sql")
+    public void getPageOneSizeFiveSortByModifiedDate() throws Exception {
+        token = testUtil.getToken(testUsername, testPassword);
+        MockHttpServletResponse response = mockMvc.perform(get(BASE_URI + "page/" + 1)
+                        .header(HttpHeaders.AUTHORIZATION, token)
+                        .param("pageSize", "5")
+                        .param("sortType", "MODIFIED_DATE_ASC"))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse();
+
+        expectationTester = new GetCommentPageExpectationTester.Builder(response)
+                .setExpectedPageCount(10)
+                .setExpectedPageDtoListSize(5)
+                .setExpectedFirstCommentId(3)
+                .setExpectedOwnerUsername("mickey_m")
+                .build();
+
+        expectationTester.test();
+    }
+
+    @Test
+    @Sql(executionPhase = BEFORE_TEST_METHOD, value = BASE_SCRIPT_PATH + "GetPageTest/before.sql")
+    @Sql(executionPhase = AFTER_TEST_METHOD, value = BASE_SCRIPT_PATH + "GetPageTest/after.sql")
+    public void getPageOneSizeFiveSortByModifiedDateDesc() throws Exception {
+        token = testUtil.getToken(testUsername, testPassword);
+        MockHttpServletResponse response = mockMvc.perform(get(BASE_URI + "page/" + 1)
+                        .header(HttpHeaders.AUTHORIZATION, token)
+                        .param("pageSize", "5")
+                        .param("sortType", "MODIFIED_DATE_DESC"))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse();
+
+        expectationTester = new GetCommentPageExpectationTester.Builder(response)
+                .setExpectedPageCount(10)
+                .setExpectedPageDtoListSize(5)
+                .setExpectedFirstCommentId(9)
+                .setExpectedOwnerUsername("mickey_m")
+                .build();
+
+        expectationTester.test();
+    }
+
+    @Test
+    @Sql(executionPhase = BEFORE_TEST_METHOD, value = BASE_SCRIPT_PATH + "GetPageTest/before.sql")
+    @Sql(executionPhase = AFTER_TEST_METHOD, value = BASE_SCRIPT_PATH + "GetPageTest/after.sql")
+    public void getPageTwoSizeFiveSortByModifiedDate() throws Exception {
+        token = testUtil.getToken(testUsername, testPassword);
+        MockHttpServletResponse response = mockMvc.perform(get(BASE_URI + "page/" + 2)
+                        .header(HttpHeaders.AUTHORIZATION, token)
+                        .param("pageSize", "5")
+                        .param("sortType", "MODIFIED_DATE_ASC"))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse();
+
+        expectationTester = new GetCommentPageExpectationTester.Builder(response)
+                .setExpectedPageCount(10)
+                .setExpectedPageDtoListSize(5)
+                .setExpectedFirstCommentId(10)
+                .setExpectedOwnerUsername("mickey_m")
+                .build();
+
+        expectationTester.test();
+    }
+
+    @Test
+    @Sql(executionPhase = BEFORE_TEST_METHOD, value = BASE_SCRIPT_PATH + "GetPageTest/before.sql")
+    @Sql(executionPhase = AFTER_TEST_METHOD, value = BASE_SCRIPT_PATH + "GetPageTest/after.sql")
+    public void getPageTwoSizeFiveSortByModifiedDateDesc() throws Exception {
+        token = testUtil.getToken(testUsername, testPassword);
+        MockHttpServletResponse response = mockMvc.perform(get(BASE_URI + "page/" + 2)
+                        .header(HttpHeaders.AUTHORIZATION, token)
+                        .param("pageSize", "5")
+                        .param("sortType", "MODIFIED_DATE_DESC"))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse();
+
+        expectationTester = new GetCommentPageExpectationTester.Builder(response)
+                .setExpectedPageCount(10)
+                .setExpectedPageDtoListSize(5)
+                .setExpectedFirstCommentId(8)
                 .setExpectedOwnerUsername("mickey_m")
                 .build();
 
