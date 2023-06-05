@@ -34,7 +34,6 @@ public class UserQuestionCommentRestController {
     public ResponseEntity<Void> createComment(@RequestBody @Valid @NotNull QuestionCommentRequestDto dto,
                                               @NotNull Authentication authentication) {
         QuestionComment questionComment = questionCommentMapper.dtoAndAuthenticationToQuestionComment(dto, authentication);
-        System.out.println("QUESTION_COMMENT: " + questionComment);
         QuestionComment savedQuestionComment = service.create(questionComment);
         Long generatedId = savedQuestionComment.getId();
         URI location = URI.create(BASE_URI + "/" + generatedId);
@@ -62,7 +61,6 @@ public class UserQuestionCommentRestController {
     public ResponseEntity<Data<Page<QuestionCommentResponseDto>>> getPage(@PathVariable @Positive @NotNull Integer pageNumber,
                                                                           @RequestParam(defaultValue = "20") @NotNull Integer pageSize,
                                                                           @RequestParam(defaultValue = "ID_ASC") @NotNull SortType sortType) {
-        System.out.printf("PaginationParameters[pageNumber=%d, pageSize=%d, sortType=%s]\n", pageNumber, pageSize, sortType);
         PaginationParameters params = PaginationParameters.ofPageNumberSizeAndSortType(pageNumber, pageSize, sortType);
         Page<QuestionCommentResponseDto> page = dtoService.getPage(params);
         Data<Page<QuestionCommentResponseDto>> responseData = Data.build(page);

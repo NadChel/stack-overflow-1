@@ -2,27 +2,20 @@ package stack.overflow.util;
 
 import stack.overflow.model.pagination.PaginationParameters;
 
-import javax.persistence.Entity;
-
 public class PaginationParametersProcessor {
-    public static String extractSortingModifier(PaginationParameters params) {
-        return params.sortType().getQuery();
+    public static String extractSortingModifierTrimmed(PaginationParameters params) {
+        return params.sortType().getQuery().trim();
     }
 
-    public static String extractSortingModifier(PaginationParameters params,
-                                                Class<?> entity) {
-        String nonadaptedQuery = extractSortingModifier(params);
-        String entityTableName = extractEntityTableName(entity);
-        String adaptedQuery = nonadaptedQuery.replaceFirst("(?=\\w)", entityTableName + ".");
-        return adaptedQuery;
+    public static String extractOrderByColumn(PaginationParameters params) {
+        String sortingModifier = extractSortingModifierTrimmed(params);
+        return (sortingModifier.indexOf(" ") > 0) ?
+                sortingModifier.substring(0, sortingModifier.indexOf(" ")) :
+                sortingModifier;
     }
 
-    private static String extractEntityTableName(Class<?> entity) {
-        if (entity.isAnnotationPresent(Entity.class)) {
-            return entity.getSimpleName();
-        } else {
-            throw new IllegalArgumentException(String.format("%s is not an @Entity", entity.getName()));
-        }
+    public static boolean isDescending(PaginationParameters params) {
+        return extractSortingModifierTrimmed(params).contains("DESC");
     }
 
     public static int extractFirstResultIndex(PaginationParameters params) {

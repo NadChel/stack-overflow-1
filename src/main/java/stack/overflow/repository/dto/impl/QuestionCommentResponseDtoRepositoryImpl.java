@@ -10,6 +10,7 @@ import stack.overflow.util.PaginationParametersProcessor;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,17 +34,37 @@ public class QuestionCommentResponseDtoRepositoryImpl implements QuestionComment
 
     @Override
     public List<QuestionCommentResponseDto> getDtosWithoutSetOwner(PaginationParameters params) {
-        String sortingModifier = PaginationParametersProcessor.extractSortingModifier(params).trim();
+        String orderByColumn = PaginationParametersProcessor.extractOrderByColumn(params);
+        boolean isDescending = PaginationParametersProcessor.isDescending(params);
         int offset = PaginationParametersProcessor.extractFirstResultIndex(params);
         int limit = PaginationParametersProcessor.extractMaxResults(params);
-        return entityManager.createQuery("""
+
+        List<QuestionCommentResponseDto> comments = entityManager.createQuery("""
                 SELECT new stack.overflow.model.dto.response.QuestionCommentResponseDto (
                             qc.id, q.id, qc.createdDate, qc.modifiedDate, qc.text
                 ) FROM QuestionComment qc JOIN qc.question q
-                ORDER BY qc.""" + sortingModifier, QuestionCommentResponseDto.class)
+                ORDER BY qc.""" + orderByColumn, QuestionCommentResponseDto.class)
                 .setFirstResult(offset)
                 .setMaxResults(limit)
                 .getResultList();
+
+        if(isDescending) {
+            Collections.reverse(comments);
+        }
+
+        return comments;
+
+        /*
+        SELECT *
+        FROM  (
+           SELECT *
+           FROM   users
+           ORDER  BY id
+           LIMIT  3
+           OFFSET 3
+           ) sub
+        ORDER  BY id DESC;
+        */
     }
 
     @Override
