@@ -80,9 +80,14 @@ public class UserQuestionRestController {
 
     @GetMapping("/page/{pageNumber}")
     public ResponseEntity<Data<Page<QuestionResponseDto>>> getPage(@PathVariable @NotNull @Positive Integer pageNumber,
-                                                                   @RequestParam(defaultValue = "20") @NotNull @Positive Integer size,
-                                                                   @RequestParam(defaultValue = "ID_ASC") @NotNull SortType sortType) {
-        PaginationParameters parameters = new PaginationParameters(pageNumber, size, sortType);
+                                                                   @RequestParam(defaultValue = "20") @NotNull @Positive Integer pageSize,
+                                                                   @RequestParam(defaultValue = "ID_ASC") @NotNull SortType sortType,
+                                                                   @RequestParam(required = false) String text) {
+        PaginationParameters parameters = PaginationParameters.builder(pageNumber)
+                .withPageSize(pageSize)
+                .withSortType(sortType)
+                .withText(text)
+                .build();
         Page<QuestionResponseDto> page = questionResponseDtoService.getPage(parameters);
         return ResponseEntity.ok(Data.build(page));
     }

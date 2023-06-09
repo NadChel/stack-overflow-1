@@ -10,3 +10,29 @@ services:
       - POSTGRES_DB=stack_overflow_postgres
     ports:
       - '5411:5432'
+  stack_overflow_elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.15.0
+    container_name: stack_overflow_elasticsearch
+    restart: always
+    environment:
+      - discovery.type=single-node
+      - ELASTIC_PASSWORD=your_password
+      - xpack.security.enabled=true
+    ports:
+      - '9200:9200'
+      - '9300:9300'
+
+  stack_overflow_app:
+      build: .
+      depends_on:
+        - stack_overflow_postgres
+        - stack_overflow_elasticsearch
+      environment:
+        - SPRING_DATASOURCE_URL=jdbc:postgresql://stack_overflow_postgres:5432/stack_overflow_postgres
+        - SPRING_DATASOURCE_USERNAME=postgres
+        - SPRING_DATASOURCE_PASSWORD=postgres123
+        - SPRING_ELASTICSEARCH_REST_URIS=http://stack_overflow_elasticsearch:9200
+        - SPRING_ELASTICSEARCH_REST_USERNAME=elastic
+        - SPRING_ELASTICSEARCH_REST_PASSWORD=your_password
+      ports:
+        - '8080:8080'

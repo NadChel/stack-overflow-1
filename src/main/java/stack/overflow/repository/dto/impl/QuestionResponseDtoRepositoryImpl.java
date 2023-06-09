@@ -48,8 +48,8 @@ public class QuestionResponseDtoRepositoryImpl implements QuestionResponseDtoRep
                                 FROM Question q
                                 ORDER BY
                                 """ + paginationParameters.sortType().getQuery(), QuestionResponseDto.class)
-                .setFirstResult((paginationParameters.pageNumber() - 1) * paginationParameters.size())
-                .setMaxResults(paginationParameters.size())
+                .setFirstResult((paginationParameters.pageNumber() - 1) * paginationParameters.pageSize())
+                .setMaxResults(paginationParameters.pageSize())
                 .getResultList();
     }
 

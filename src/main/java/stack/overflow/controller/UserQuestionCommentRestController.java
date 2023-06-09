@@ -60,8 +60,13 @@ public class UserQuestionCommentRestController {
     @GetMapping("/page/{pageNumber}")
     public ResponseEntity<Data<Page<QuestionCommentResponseDto>>> getPage(@PathVariable @Positive @NotNull Integer pageNumber,
                                                                           @RequestParam(defaultValue = "20") @NotNull Integer pageSize,
-                                                                          @RequestParam(defaultValue = "ID_ASC") @NotNull SortType sortType) {
-        PaginationParameters params = PaginationParameters.ofPageNumberSizeAndSortType(pageNumber, pageSize, sortType);
+                                                                          @RequestParam(defaultValue = "ID_ASC") @NotNull SortType sortType,
+                                                                          @RequestParam(required = false) String text) {
+        PaginationParameters params = PaginationParameters.builder(pageNumber)
+                .withPageSize(pageSize)
+                .withSortType(sortType)
+                .withText(text)
+                .build();
         Page<QuestionCommentResponseDto> page = dtoService.getPage(params);
         Data<Page<QuestionCommentResponseDto>> responseData = Data.build(page);
         return ResponseEntity.ok(responseData);

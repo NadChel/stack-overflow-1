@@ -37,7 +37,7 @@ public class QuestionCommentResponseDtoRepositoryImpl implements QuestionComment
         String orderByColumn = PaginationParametersProcessor.extractOrderByColumn(params);
         boolean isDescending = PaginationParametersProcessor.isDescending(params);
         int offset = PaginationParametersProcessor.extractFirstResultIndex(params);
-        int limit = PaginationParametersProcessor.extractMaxResults(params);
+        int limit = PaginationParametersProcessor.extractPageSize(params);
 
         List<QuestionCommentResponseDto> comments = entityManager.createQuery("""
                 SELECT new stack.overflow.model.dto.response.QuestionCommentResponseDto (
@@ -53,18 +53,6 @@ public class QuestionCommentResponseDtoRepositoryImpl implements QuestionComment
         }
 
         return comments;
-
-        /*
-        SELECT *
-        FROM  (
-           SELECT *
-           FROM   users
-           ORDER  BY id
-           LIMIT  3
-           OFFSET 3
-           ) sub
-        ORDER  BY id DESC;
-        */
     }
 
     @Override
