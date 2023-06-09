@@ -97,9 +97,9 @@ public class PaginationParametersProcessor {
     /**
      * Returns a {@code PaginationParametersProcessingResult} object
      * @param params {@code PaginationParameters} instance
-     * @implNote invokes {@code PaginationParametersProcessor}'s all single-purpose methods to pass the return values to the
-     * {@code PaginationParametersProcessingResult} constructor
-     * @return {@code PaginationParametersProcessingResult}
+     * @implNote invokes {@code PaginationParametersProcessor}'s all public single-purpose methods
+     * to pass their return values to the {@code PaginationParametersProcessingResult}'s constructor
+     * @return {@code PaginationParametersProcessingResult} instance
      */
     public static PaginationParametersProcessingResult process(PaginationParameters params) {
         return new PaginationParametersProcessingResult(

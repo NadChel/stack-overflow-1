@@ -36,7 +36,7 @@ public class ElasticQuestionResponseDtoRepositoryImpl implements ElasticQuestion
                 .withPageable(Pageable.ofSize(p.pageSize()).withPage(p.pageNumber()));
 
         if (p.text().isPresent()) {
-            queryBuilder = queryBuilder.withQuery(QueryBuilders.multiMatchQuery(p.text()));
+            queryBuilder = queryBuilder.withQuery(QueryBuilders.multiMatchQuery(p.text().get()));
         }
 
         Query query = queryBuilder.build();
